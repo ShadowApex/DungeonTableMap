@@ -58,7 +58,7 @@ if not os.path.isdir(USER_DATA_PATH):
         if not os.path.isdir(USER_DATA_PATH):
             raise
 
-for data_dir in ["/maps", "/sprites", "/tilesets"]:
+for data_dir in ["/maps", "/sprites", "/tilesets", "/music"]:
     if not os.path.isdir(USER_DATA_PATH + data_dir):
         try:
             os.makedirs(USER_DATA_PATH + data_dir)

@@ -13,13 +13,19 @@ from pyscroll.group import PyscrollGroup
 from core import prepare
 
 def get_map(filename):
-    if os.path.isfile(os.path.join(prepare.USER_DATA_PATH + "/maps", filename)):
-        return os.path.join(prepare.USER_DATA_PATH + "/maps", filename)
+    return get_resource("/maps", filename)
 
-    return os.path.join(prepare.RESOURCES_DIR + "/maps", filename)
+def get_music(filename):
+    return get_resource("/music", filename)
 
 def load_sprite(filename):
-    return pygame.image.load(os.path.join(prepare.RESOURCES_DIR + "/sprites", filename))
+    return pygame.image.load(get_resource("/sprites", filename))
+
+def get_resource(data_dir, filename):
+    if os.path.isfile(os.path.join(prepare.USER_DATA_PATH + data_dir, filename)):
+        return os.path.join(prepare.USER_DATA_PATH + data_dir, filename)
+
+    return os.path.join(prepare.RESOURCES_DIR + data_dir, filename)
 
 def get_starting_position(tile_width, tile_position):
     position = (tile_position[0] * tile_width,
@@ -70,6 +76,12 @@ class DungeonMap(object):
 
         # load map data
         tmx_data = load_pygame(self.filename)
+
+        # load and play music if one is defined
+        if "music" in tmx_data.properties:
+            music = tmx_data.properties["music"]
+            pygame.mixer.music.load(get_music(music))
+            pygame.mixer.music.play(-1)
 
         # setup level geometry with simple pygame rects, loaded from pytmx
         self.walls = list()
@@ -191,6 +203,7 @@ def init_screen(width, height):
 if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
+    pygame.mixer.init()
     screen = init_screen(1280, 720)
     pygame.display.set_caption('Dungeon Table Map')
 

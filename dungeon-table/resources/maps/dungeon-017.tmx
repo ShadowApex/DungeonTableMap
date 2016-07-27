@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="52" height="69" tilewidth="16" tileheight="16" nextobjectid="70">
+ <properties>
+  <property name="music" value="Soliloquy.ogg"/>
+ </properties>
  <tileset firstgid="1" name="dungeon-017" tilewidth="16" tileheight="16" tilecount="3588" columns="52">
   <image source="../tilesets/dungeon-017.jpg" width="834" height="1104"/>
  </tileset>
