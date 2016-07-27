@@ -1,6 +1,10 @@
 # Dungeon Table Map
 Dungeon Table Map is an open source map display program for table-top D&amp;D maps.
 
+![](http://makezine.com/wp-content/uploads/2015/12/gamingTable_5.jpg)
+
+[source](http://makezine.com/2015/12/08/how-to-build-a-high-end-gaming-table-for-as-little-as-150/)
+
 Version
 -------
 
