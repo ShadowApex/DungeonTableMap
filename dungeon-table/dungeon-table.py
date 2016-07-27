@@ -12,18 +12,14 @@ from pyscroll.group import PyscrollGroup
 
 from core import prepare
 
-RESOURCES_DIR = 'resources'
-HERO_MOVE_SPEED = 200 # pixels per second
-MAP_FILENAME = 'dungeon-017.tmx'
-
 def get_map(filename):
-    return os.path.join(RESOURCES_DIR + "/maps", filename)
+    if os.path.isfile(os.path.join(prepare.USER_DATA_PATH + "/maps", filename)):
+        return os.path.join(prepare.USER_DATA_PATH + "/maps", filename)
 
-def load_image(filename):
-    return pygame.image.load(os.path.join(RESOURCES_DIR + "/tilesets", filename))
+    return os.path.join(prepare.RESOURCES_DIR + "/maps", filename)
 
 def load_sprite(filename):
-    return pygame.image.load(os.path.join(RESOURCES_DIR + "/sprites", filename))
+    return pygame.image.load(os.path.join(prepare.RESOURCES_DIR + "/sprites", filename))
 
 def get_starting_position(tile_width, tile_position):
     position = (tile_position[0] * tile_width,
@@ -67,7 +63,7 @@ class DungeonMap(object):
 
     This class will load data, create a pyscroll group, a hero object.
     """
-    filename = get_map(MAP_FILENAME)
+    filename = get_map(prepare.CONFIG.starting_map)
 
     def __init__(self):
         self.running = False
@@ -141,16 +137,16 @@ class DungeonMap(object):
 
         pressed = pygame.key.get_pressed()
         if pressed[K_UP]:
-            self.hero.velocity[1] = -HERO_MOVE_SPEED
+            self.hero.velocity[1] = -prepare.CONFIG.move_speed
         elif pressed[K_DOWN]:
-            self.hero.velocity[1] = HERO_MOVE_SPEED
+            self.hero.velocity[1] = prepare.CONFIG.move_speed
         else:
             self.hero.velocity[1] = 0
 
         if pressed[K_LEFT]:
-            self.hero.velocity[0] = -HERO_MOVE_SPEED
+            self.hero.velocity[0] = -prepare.CONFIG.move_speed
         elif pressed[K_RIGHT]:
-            self.hero.velocity[0] = HERO_MOVE_SPEED
+            self.hero.velocity[0] = prepare.CONFIG.move_speed
         else:
             self.hero.velocity[0] = 0
 

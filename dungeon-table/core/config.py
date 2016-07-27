@@ -37,12 +37,14 @@ class Config(object):
         self.config = configparser.ConfigParser()
         self.config.read(file)
 
-        self.resolution_x = self.config.get("display", "resolution_x")
-        self.resolution_y = self.config.get("display", "resolution_y")
-        self.resolution = (int(self.resolution_x), int(self.resolution_y))
+        self.resolution_x = self.config.getint("display", "resolution_x")
+        self.resolution_y = self.config.getint("display", "resolution_y")
+        self.resolution = (self.resolution_x, self.resolution_y)
 
         self.fullscreen = self.config.getboolean("display", "fullscreen")
-        self.fps = int(self.config.get("display", "fps"))
+        self.fps = self.config.getint("display", "fps")
+
+        self.move_speed = self.config.getint("player", "move_speed")
 
         self.starting_map = self.config.get("game", "starting_map")
         self.starting_position = [int(self.config.get("game", "starting_position_x")),

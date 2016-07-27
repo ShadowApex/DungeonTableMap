@@ -50,7 +50,7 @@ if not os.path.isfile(CONFIG_FILE_PATH):
         raise
 
 # Set up our custom campaign data directory.
-USER_DATA_PATH = CONFIG_PATH + "data/"
+USER_DATA_PATH = CONFIG_PATH + "data/resources"
 if not os.path.isdir(USER_DATA_PATH):
     try:
         os.makedirs(USER_DATA_PATH)
@@ -58,10 +58,17 @@ if not os.path.isdir(USER_DATA_PATH):
         if not os.path.isdir(USER_DATA_PATH):
             raise
 
+for data_dir in ["/maps", "/sprites", "/tilesets"]:
+    if not os.path.isdir(USER_DATA_PATH + data_dir):
+        try:
+            os.makedirs(USER_DATA_PATH + data_dir)
+        except OSError:
+            if not os.path.isdir(USER_DATA_PATH + data_dir):
+                raise
+
 # Read the "dungeon.cfg" configuration file
 CONFIG = config.Config(CONFIG_FILE_PATH)
 
 RESOURCES_DIR = 'resources'
 HERO_MOVE_SPEED = 200 # pixels per second
 MAP_FILENAME = CONFIG.starting_map
-MAP_FILENAME = 'dyrford-crossing.tmx'
