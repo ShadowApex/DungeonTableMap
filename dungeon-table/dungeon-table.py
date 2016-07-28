@@ -11,6 +11,7 @@ import pyscroll.data
 from pyscroll.group import PyscrollGroup
 
 from core import prepare
+from core import fog
 
 def get_map(filename):
     return get_resource("/maps", filename)
@@ -83,6 +84,9 @@ class DungeonMap(object):
             pygame.mixer.music.load(get_music(music))
             pygame.mixer.music.play(-1)
 
+        # create fog layer
+        self.fog_of_war = fog.FogOfWar(size=(1280, 720))
+
         # setup level geometry with simple pygame rects, loaded from pytmx
         self.walls = list()
         for object in tmx_data.objects:
@@ -114,6 +118,7 @@ class DungeonMap(object):
 
         # add our hero to the group
         self.group.add(self.hero)
+        self.group.add(self.fog_of_war)
 
     def draw(self, surface):
         # center the map/screen on the party
@@ -167,6 +172,9 @@ class DungeonMap(object):
         """ Tasks that occur over time should be handled here
         """
         self.group.update(dt)
+
+        # Update the visibility of the fog of war
+        self.fog_of_war.set_visible_position(self.hero.position)
 
         # check if the sprite's feet are colliding with wall
         # sprite must have a rect called feet, and move_back method,
