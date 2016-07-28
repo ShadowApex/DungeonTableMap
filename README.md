@@ -14,10 +14,10 @@ Features
 - Load scrollable maps
 - Collidable walls
 - Play music when map loads
+- Fog of war
 
 **Planned Features**
 
-- Fog of war
 - Walls block vision of other rooms/locations
 - Tie maps together
 - Event system for playing sound effects at desired times
