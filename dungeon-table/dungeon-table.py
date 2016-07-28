@@ -74,9 +74,10 @@ class DungeonMap(object):
 
     def __init__(self):
         self.running = False
+        self.fog_enabled = False
 
         # load map data
-        tmx_data = load_pygame(self.filename)
+        tmx_data = load_pygame(self.filename, pixelalpha=True)
 
         # load and play music if one is defined
         if "music" in tmx_data.properties:
@@ -84,8 +85,10 @@ class DungeonMap(object):
             pygame.mixer.music.load(get_music(music))
             pygame.mixer.music.play(-1)
 
-        # create fog layer
-        self.fog_of_war = fog.FogOfWar(size=(1280, 720))
+        # use fog of war if it is defined
+        if "fog" in tmx_data.properties:
+            if tmx_data.properties["fog"].lower() in ["yes", "true"]:
+                self.fog_enabled = True
 
         # setup level geometry with simple pygame rects, loaded from pytmx
         self.walls = list()
@@ -93,6 +96,10 @@ class DungeonMap(object):
             self.walls.append(pygame.Rect(
                 object.x, object.y,
                 object.width, object.height))
+
+        # create fog layer
+        if self.fog_enabled:
+            self.fog_of_war = fog.FogOfWar((1280, 720), self.walls)
 
         # create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
@@ -174,7 +181,8 @@ class DungeonMap(object):
         self.group.update(dt)
 
         # Update the visibility of the fog of war
-        self.fog_of_war.set_visible_position(self.hero.position)
+        if self.fog_enabled:
+            self.fog_of_war.set_visible_position(self.hero.position)
 
         # check if the sprite's feet are colliding with wall
         # sprite must have a rect called feet, and move_back method,
