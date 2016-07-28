@@ -16,7 +16,7 @@ class FogOfWar(pygame.sprite.Sprite):
         self.image = pygame.Surface(size, pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.visible_area = self.image.copy()
-        self.image.fill((0,0,0,220))
+        self.image.fill((20,20,20,255))
         self.footprint = self.rect
         self.footprint.midbottom = self.rect.midbottom
         self.mask = pygame.mask.from_surface(self.visible_area)
