@@ -13,6 +13,9 @@ from pyscroll.group import PyscrollGroup
 from core import prepare
 from core import fog
 
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+
 def get_map(filename):
     return get_resource("/maps", filename)
 
@@ -166,9 +169,15 @@ class DungeonMap(object):
                     if value > 0:
                         self.map_layer.zoom = value
 
-            elif event.type == pygame.VIDEORESIZE:
-                init_screen(event.w, event.h)
-                self.map_player.set_size((event.w / 2, event.h / 2))
+                elif event.key ==K_f:
+                    flags = screen.get_flags()
+                    #toggle fullscreen by pressing F key.
+                    if flags&FULLSCREEN==False:
+                        flags|=FULLSCREEN
+                        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), flags)
+                    else:
+                        flags^=FULLSCREEN
+                        pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), flags)
 
         pressed = pygame.key.get_pressed()
         if pressed[K_UP]:
@@ -231,7 +240,7 @@ if __name__ == "__main__":
     pygame.init()
     pygame.font.init()
     pygame.mixer.init()
-    screen = init_screen(1280, 720)
+    screen = init_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
     pygame.display.set_caption('Dungeon Table Map')
 
     try:
