@@ -90,6 +90,14 @@ class DungeonMap(object):
             if tmx_data.properties["fog"].lower() in ["yes", "true"]:
                 self.fog_enabled = True
 
+        # use starting position if defined in map
+        if "start" in tmx_data.properties:
+            starting_position = tmx_data.properties["start"].replace(" ", "").split(",")
+            starting_position[0] = int(starting_position[0])
+            starting_position[1] = int(starting_position[1])
+        else:
+            starting_position = prepare.CONFIG.starting_position
+
         # setup level geometry with simple pygame rects, loaded from pytmx
         self.walls = list()
         for object in tmx_data.objects:
@@ -99,7 +107,9 @@ class DungeonMap(object):
 
         # create fog layer
         if self.fog_enabled:
-            self.fog_of_war = fog.FogOfWar((1280, 720), self.walls)
+            fog_width = tmx_data.tilewidth * tmx_data.width
+            fog_height = tmx_data.tileheight * tmx_data.height
+            self.fog_of_war = fog.FogOfWar((fog_width, fog_height), self.walls)
 
         # create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
@@ -121,11 +131,12 @@ class DungeonMap(object):
 
         # put the hero in the starting position of the map
         self.hero.position = get_starting_position(tmx_data.tilewidth,
-                                                   prepare.CONFIG.starting_position)
+                                                   starting_position)
 
         # add our hero to the group
         self.group.add(self.hero)
-        self.group.add(self.fog_of_war)
+        if self.fog_enabled:
+            self.group.add(self.fog_of_war)
 
     def draw(self, surface):
         # center the map/screen on the party
